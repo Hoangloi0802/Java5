@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{/layouts/header}">
+  <title>Home</title>
+</head>
+
+<body>
+  <header th:replace="~{/layouts/nav}">
+  </header>
+  <main>
+    <div class="container-fluid fruite py-5">
+      <div class="container py-5">
+        <div class="row g-5 align-items-center">
+          <div class="col-md-12 col-lg-7">
+            <h4 class="mb-3 text-secondary">100% Organic Foods</h4>
+            <h1 class="mb-5 display-3 text-primary">Organic Veggies &amp; Fruits Foods</h1>
+
+          </div>
+          <div class="col-md-12 col-lg-5">
+            <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item rounded active carousel-item-start">
+                  <img src="img/hero-img-1.png" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
+                </div>
+                <div class="carousel-item rounded carousel-item-next carousel-item-start">
+                  <img src="img/hero-img-2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container py-5">
+        <div class="tab-class text-center">
+          <div class="row g-4">
+            <div class="col-lg-4 text-start">
+              <h1>Sản phẩm</h1>
+            </div>
+            <div class="col-lg-8 text-end">
+              <ul class="nav nav-pills d-inline-flex text-center mb-5">
+                <li class="nav-item">
+                    <a class="d-flex m-2 py-2 bg-light rounded-pill active" href="/shop">
+                        <span class="text-dark" style="width: 130px;">All Products</span>
+                    </a>
+                </li>
+                <li class="nav-item" th:each="category : ${categories}">
+                  <a class="d-flex m-2 py-2 bg-light rounded-pill" th:href="@{/shop(category=${category.key})}">
+                      <span class="text-dark" style="width: 130px;" th:text="${category.key}"></span>
+                  </a>
+              </li>
+              
+            </ul>
+            
+            </div>
+          </div>
+          <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+              <div class="row g-4">
+                <div class="col-lg-12">
+                  <div class="row g-4">
+                    <div class="col-md-6 col-lg-4 col-xl-3" th:each="product : ${products}">
+                      <div class="rounded position-relative fruite-item h-100 d-flex flex-column border">
+                        <div class="fruite-img">
+                          <a th:href="@{'/chitiet/' + ${product.id}}">
+                            <img th:src="@{/images/{img}(img=${product.image})}"
+                              class="img-fluid w-100 rounded-top object-fit-cover" style="height: 200px;" alt="">
+                          </a>
+                        </div>
+
+                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                          style="top: 10px; left: 10px;" th:text="${product.category.name}">
+                        </div>
+
+                        <div
+                          class="p-4 border border-secondary border-top-0 rounded-bottom d-flex flex-column flex-grow-1">
+                          <h4 th:text="${product.name}" class="text-center mb-3">Product Name</h4>
+
+                          <p class="text-dark fs-5 fw-bold text-center mb-3"
+                            th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' đ / kg'}">
+                          </p>
+                          <div class="mt-auto text-center">
+                            <a th:href="@{/cart/add/{id}(id=${product.id})}" class="btn btn-primary w-100">
+                              <i class="fa fa-shopping-cart"></i> Add to Cart
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="container featurs py-5 bg-light p-5 rounded">
+        <div class="container py-5">
+          <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+              <div class="featurs-item text-center rounded bg-light p-4">
+                <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                  <i class="fas fa-car-side fa-3x text-white"></i>
+                </div>
+                <div class="featurs-content text-center">
+                  <h5>Free Shipping</h5>
+                  <p class="mb-0">Free on order over $300</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="featurs-item text-center rounded bg-light p-4">
+                <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                  <i class="fas fa-user-shield fa-3x text-white"></i>
+                </div>
+                <div class="featurs-content text-center">
+                  <h5>Security Payment</h5>
+                  <p class="mb-0">100% security payment</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="featurs-item text-center rounded bg-light p-4">
+                <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                  <i class="fas fa-exchange-alt fa-3x text-white"></i>
+                </div>
+                <div class="featurs-content text-center">
+                  <h5>30 Day Return</h5>
+                  <p class="mb-0">30 day money guarantee</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+              <div class="featurs-item text-center rounded bg-light p-4">
+                <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                  <i class="fa fa-phone-alt fa-3x text-white"></i>
+                </div>
+                <div class="featurs-content text-center">
+                  <h5>24/7 Support</h5>
+                  <p class="mb-0">Support every time fast</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+  <div th:replace="~{/layouts/footer}">
+  </div>
+</body>
+
+</html>

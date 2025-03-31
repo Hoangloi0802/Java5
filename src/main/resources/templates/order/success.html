@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="~{/layouts/header}">
+        <title>Home</title>
+    </head>
+    <body>
+        <header th:replace="~{/layouts/nav}">
+        </header>
+        <main class="container">
+            <h2>Đặt hàng thành công!</h2>
+            <p>Mã đơn hàng: <span th:text="${orderId}"></span></p>
+            <a href="/order">Xem đơn hàng của bạn</a>
+        </main>
+        <div th:replace="~{/layouts/footer}">
+        </div>
+    </body>
+</html>

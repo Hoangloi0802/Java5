@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{/layouts/header}">
+    <title>Home</title>
+</head>
+
+<body>
+    <header th:replace="~{/layouts/nav}">
+    </header>
+    <main class="container">
+        <div class="col-md-8 themed-grid-col">
+            <div class="container mt-5">
+                <form th:action="@{/profile/update}" method="post" enctype="multipart/form-data" th:object="${account}">
+
+                    <div class="row gx-4 mt-3">
+                        <!-- Cột trái: Ảnh đại diện -->
+                        <div class="col-xl-4">
+                            <div class="card">
+                                <div class="card-header">Ảnh đại diện</div>
+                                <div class="card-body text-center">
+                                    <!-- Hiển thị ảnh đại diện -->
+                                    <img id="previewImage" th:src="@{/images/{img}(img=${account.photo})}" width="100"
+                                        th:style="${account.photo != null} ? 'display: block;' : 'display: none;'"
+                                        class="mx-auto d-block">
+
+                                    <div id="imageNote" class="small font-italic text-muted mb-4"
+                                        th:style="${account.photo != null} ? 'display: none;' : 'display: block;'">
+                                        JPG hoặc PNG không lớn hơn 5MB
+                                    </div>
+
+                                    <!-- Input chọn ảnh -->
+                                    <input class="form-control mt-3" type="file" id="imageFile" name="imageFile"
+                                        accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cột phải: Thông tin tài khoản -->
+                        <div class="col-xl-8">
+                            <div class="card mb-4">
+                                <div class="card-header">Thông tin tài khoản</div>
+                                <div class="card-body">
+                                    <div class="row mt-3">
+                                        <div class="col-6">
+                                            <input type="hidden" th:field="*{id}" />
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Tên đăng nhập</label>
+                                                <input type="text" th:field="*{username}" class="form-control"
+                                                    readonly />
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Mật khẩu</label>
+                                                <input type="password" class="form-control" value="********" readonly />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <!-- Chỉnh sửa họ tên -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Họ và tên</label>
+                                                <input type="text" class="form-control" th:field="*{fullname}">
+                                            </div>
+
+                                            <!-- Chỉnh sửa email -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" th:field="*{email}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Nút Submit -->
+                                    <div class="mt-5 d-flex flex-row-reverse">
+                                        <button id="Capnhat" type="submit" class="btn btn-warning me-2">Cập
+                                            nhật</button>
+                                    </div>
+
+                                    <!-- Hiển thị thông báo -->
+                                    <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+                                    <p th:if="${message}" th:text="${message}" style="color:green;"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+    <div th:replace="~{/layouts/footer}">
+    </div>
+</body>
+
+</html>

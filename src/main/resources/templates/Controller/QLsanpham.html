@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{/layouts/header}">
+    <title>Home</title>
+</head>
+
+<body>
+    <header th:replace="~{/layouts/nav}">
+    </header>
+    <main class="container-fluid">
+        <div class="row mb-3 text-center">
+            <div th:replace="~{/layouts/sidebar}" />
+            <div class="col-md-10 themed-grid-col">
+                <div class="container-fluid">
+                    <h2>Quản lý sản phẩm</h2>
+                    <hr>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="editor-tab" data-bs-toggle="tab"
+                                data-bs-target="#editor" type="button" role="tab" aria-controls="editor"
+                                aria-selected="true">Editor</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list"
+                                type="button" role="tab" aria-controls="list" aria-selected="false">List</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="editor" role="tabpanel" aria-labelledby="editor-tab">
+                            <form method="post" th:action="@{/admin/products/save}" th:object="${product}"
+                                enctype="multipart/form-data">
+                                <input type="hidden" th:field="*{id}" />
+                                <div _ngcontent-cmu-c247="" class="row gx-4 mt-3">
+                                    <div _ngcontent-cmu-c247="" class="col-xl-4">
+                                        <div class="card">
+                                            <div class="card-header">Ảnh sản phẩm</div>
+                                            <div class="card-body text-center">
+                                                <img id="previewImage" th:src="@{/images/{img}(img=${product.image})}"
+                                                    width="100"
+                                                    th:style="${product.image != null} ? 'display: block;' : 'display: none;'"
+                                                    class="mx-auto d-block">
+                                                <div id="imageNote" class="small font-italic text-muted mb-4"
+                                                    th:style="${product.image != null} ? 'display: none;' : 'display: block;'">
+                                                    JPG hoặc PNG không lớn hơn 5MB
+                                                </div>
+                                                <input class="form-control mt-3" type="file" id="imageFile"
+                                                    name="imageFile" accept="image/*" onchange="previewFile()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div _ngcontent-cmu-c247="" class="col-xl-8">
+                                        <div _ngcontent-cmu-c247="" class="card mb-4">
+                                            <div _ngcontent-cmu-c247="" class="card-header">Thông tin sản phẩm</div>
+                                            <div _ngcontent-cmu-c247="" class="card-body">
+                                                <div class="row mt-3">
+                                                    <div class="col-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Tên sản phẩm</label>
+                                                            <input type="text" class="form-control" th:field="*{name}">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Loại sản phẩm</label>
+                                                            <select class="form-select" th:field="*{category.id}">
+                                                                <option th:each="category : ${categories}"
+                                                                    th:value="${category.id}"
+                                                                    th:text="${category.name}"></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Giá</label>
+                                                            <input type="text" class="form-control" th:field="*{price}">
+                                                        </div>
+                                                        <label class="form-label">Trạng thái</label>
+                                                        <div class="mb-3">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    th:field="*{available}" th:value="true">
+                                                                <label class="form-check-label">Có sẵn</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                    th:field="*{available}" th:value="false">
+                                                                <label class="form-check-label">Hết hàng</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-5 d-flex flex-row-reverse">
+                                                    <button type="submit" class="btn btn-primary me-2">Thêm</button>
+                                                    <button type="submit" class="btn btn-warning me-2"
+                                                        formaction="/admin/products/update">Cập
+                                                        nhật</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                    <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Ảnh</th>
+                                    <th scope="col">Ngày tạo</th>
+                                    <th scope="col">Loại</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="product : ${products}">
+                                    <th scope="row" th:text="${product.id}"></th>
+                                    <td th:text="${product.name}"></td>
+                                    <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' đ'}"></td>
+                                    <td><img th:src="@{/images/{img}(img=${product.image})}" width="50">
+                                    </td>
+                                    <td th:text="${#dates.format(product.createDate, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${product.category.name}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/products/edit/{id}(id=${product.id})}"
+                                            class="btn btn-info">Sửa</a>
+                                        <a th:href="@{/admin/products/delete/{id}(id=${product.id})}" class="btn btn-danger"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{/layouts/footer}">
+    </div>
+</body>
+
+</html>

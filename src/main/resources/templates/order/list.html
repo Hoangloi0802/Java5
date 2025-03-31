@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{/layouts/header}">
+    <title>Home</title>
+</head>
+
+<body>
+    <header th:replace="~{/layouts/nav}"></header>
+
+    <div class="container my-4">
+        <h2 class="text-center text-primary">Đơn hàng của bạn</h2>
+
+        <!-- Lặp qua từng đơn hàng -->
+        <div th:each="order : ${orders}" class="card shadow-lg my-3">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-uppercase text-danger">HOÀN THÀNH</span>
+            </div>
+            <div class="card-body">
+                <!-- Lặp qua từng sản phẩm trong đơn hàng -->
+                <div th:each="detail : ${order.orderDetails}" class="d-flex align-items-center mb-3">
+                    <img th:src="@{/images/{img}(img=${detail.product.image})}" alt="Sản phẩm"
+                        class="rounded border me-3" width="100">
+                    <div>
+                        <h5 class="card-title" th:text="${detail.product.name}">Tên sản phẩm</h5>
+                        <p class="text-muted" th:text="'Số lượng: ' + ${detail.quantity}">x1</p>
+                        <p class="fw-bold text-danger" th:text="${#numbers.formatCurrency(detail.price)}">₫187.700</p>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <span class="fs-5">Tổng tiền:</span>
+                    <span class="fs-5 fw-bold text-danger" 
+                          th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![price]), 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                        0 ₫
+                    </span>
+                </div>
+                
+            </div>
+            <div class="card-footer text-end">
+                <a th:href="@{/order/{id}(id=${order.id})}" class="btn btn-outline-secondary">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{/layouts/footer}"></div>
+</body>
+
+</html>

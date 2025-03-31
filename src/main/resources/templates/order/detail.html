@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="~{/layouts/header}">
+        <title>Home</title>
+    </head>
+    <body>
+        <header th:replace="~{/layouts/nav}">
+        </header>
+        <main class="container">
+            <h2>Chi tiết đơn hàng</h2>
+    <p>ID Đơn hàng: <span th:text="${order.id}"></span></p>
+    <p>Ngày đặt: <span th:text="${order.createDate}"></span></p>
+
+    <div class="card-body">
+        <!-- Lặp qua từng sản phẩm trong đơn hàng -->
+        <div th:each="detail : ${order.orderDetails}" class="d-flex align-items-center mb-3">
+            <img th:src="@{/images/{img}(img=${detail.product.image})}" alt="Sản phẩm"
+                class="rounded border me-3" width="100">
+            <div>
+                <h5 class="card-title" th:text="${detail.product.name}">Tên sản phẩm</h5>
+                <p class="text-muted" th:text="'Số lượng: ' + ${detail.quantity}">x1</p>
+                <p class="fw-bold text-danger" th:text="${#numbers.formatCurrency(detail.price)}">₫187.700</p>
+            </div>
+        </div>
+
+        <hr>
+        <div class="d-flex justify-content-between">
+            <span class="fs-5">Tổng tiền:</span>
+            <span class="fs-5 fw-bold text-danger" 
+                  th:text="${#numbers.formatDecimal(#aggregates.sum(order.orderDetails.![price]), 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                0 ₫
+            </span>
+        </div>
+    </div>
+        </main>
+        <div th:replace="~{/layouts/footer}">
+        </div>
+    </body>
+</html>
